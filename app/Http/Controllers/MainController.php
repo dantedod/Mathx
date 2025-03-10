@@ -22,9 +22,81 @@ class MainController extends Controller
       'number_one' => 'required|integer|min:0|max:999',
       'number_two' => 'required|integer|min:0|max:999',
       'number_exercises' => 'required|integer|min:5|max:50',
+      'number_one' => 'lt:number_two'
     ]);
 
-    dd($request->all());
+    //get selected operations
+    $opreations = [];
+    if ($request->check_sum) {
+      $opreations[] = 'sum';
+    }
+    if ($request->check_subtraction) {
+      $opreations[] = 'subtraction';
+    }
+    if ($request->check_multiplication) {
+      $opreations[] = 'multiplication';
+    }
+    if ($request->check_division) {
+      $opreations[] = 'division';
+    }
+
+
+    //get numbers(min and max)
+    $min = $request->number_one;
+    $max = $request->number_two;
+
+    //get number of exercisies
+    $numberExcercisies = $request->number_exercises;
+
+    //generate exercisies
+    $exercisies = [];
+    for ($index = 1; $index <= $numberExcercisies; $index++) {
+
+      $opreation = $opreations[array_rand($opreations)];
+      $number1 = rand($min, $max);
+      $number2 = rand($min, $max);
+
+      $exercise = '';
+      $sollution = '';
+
+      switch ($opreation) {
+        case 'sum':
+          $exercise = "$number1 + $number2 =";
+          $sollution = $number1 + $number2;
+          break;
+        case 'subtraction':
+          $exercise = "$number1 - $number2 =";
+          $sollution = $number1 - $number2;
+          break;
+        case 'multiplication':
+          $exercise = "$number1 X $number2 =";
+          $sollution = $number1 * $number2;
+          break;
+        case 'division':
+          //evitar divisao com 0
+
+          if ($number2 == 0) {
+            $number2 = 1;
+          };
+          $exercise = "$number1 : $number2 =";
+          $sollution = $number1 / $number2;
+          break;
+      }
+
+      //if $sollution eh um numero com casas decimais, arredondar para 2 casas decimais
+      if (is_float($sollution)) {
+        $sollution = round($sollution, 2);
+      }
+
+      $exercisies[] = [
+        'operation' => $opreation,
+        'exercise_number' => $index,
+        'exercise' => $exercise,
+        'sollution' => "$exercise $sollution "
+      ];
+    }
+
+    dd($exercisies);
   }
   public function printExercisies()
   {
