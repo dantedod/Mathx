@@ -103,9 +103,21 @@
 
     </form>
 
+    {{-- erro de validacao --}}
+
+    @if ($errors->any())
+        <div class="container">
+            <div class="row">
+                <div class="alert alert-danger text-center mt-3">
+                    Por favor selecione pelo menos uma operacao. As parcelas deven ser numeros entre 0 e 99. o numero de
+                    exercicios deve variar de 5 a 50
+                </div>
+            </div>
+        </div>
+    @endif
     <!-- footer -->
     <footer class="text-center mt-5">
-        <p class="text-secondary">MathX &copy; <span class="text-info">[ANO]</span></p>
+        <p class="text-secondary">MathX &copy; <span class="text-info">{{ date('Y') }}</span></p>
     </footer>
 
     <!-- bootstrap -->
