@@ -29,7 +29,7 @@
 
             @foreach ($exercisies as $exercise)
                 <div class="col-3 display-6 mb-3">
-                    <span class="badge bg-dark">{{ str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="badge bg-dark">{{ $exercise['exercise_number'] }}</span>
                     <span>{{ $exercise['exercise'] }}</span>
 
                 </div>
@@ -48,8 +48,8 @@
                 <a href="{{ route('home') }}" class="btn btn-primary px-5">VOLTAR</a>
             </div>
             <div class="col text-end">
-                <a href="{{ route('printExercisies') }}" class="btn btn-secondary px-5">DESCARREGAR EXERCÍCIOS</a>
-                <a href="{{ route('exportExercisies') }}" class="btn btn-secondary px-5">IMPRIMIR EXERCÍCIOS</a>
+                <a href="{{ route('exportExercisies') }}" class="btn btn-secondary px-5">DESCARREGAR EXERCÍCIOS</a>
+                <a href="{{ route('printExercisies') }}" class="btn btn-secondary px-5">IMPRIMIR EXERCÍCIOS</a>
             </div>
         </div>
     </div>
