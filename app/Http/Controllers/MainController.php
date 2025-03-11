@@ -63,7 +63,28 @@ class MainController extends Controller
   }
   public function printExercisies()
   {
-    echo "Imprimir exercicios no navegador ";
+    //check if exercises are in session
+    if (!session()->has('exercises')) {
+      return redirect()->route('home');
+    };
+
+    $exercises = session('exercises');
+
+    echo ' <pre>';
+    echo ' <h1>Exercicios de Matematica (' . env('APP_NAME') . ') </h1>';
+    echo '<hr>';
+
+    foreach ($exercises as $exercise) {
+      echo '<h2><small>' . str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT) . ' >> </small>' . $exercise['exercise'] . '</h2>';
+    }
+
+    //solution
+    echo '<hr>';
+    echo '<small> Solucoes</small><br>';
+
+    foreach ($exercises as $exercise) {
+      echo '<small>' . str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT) . ' >> ' . $exercise['exercise'] . $exercise['sollution'] . '</small><br>';
+    }
   }
   public function exportExercisies()
   {
@@ -80,15 +101,15 @@ class MainController extends Controller
 
     switch ($opreation) {
       case 'sum':
-        $exercise = "$number1 + $number2 =";
+        $exercise = "$number1 + $number2 = ";
         $sollution = $number1 + $number2;
         break;
       case 'subtraction':
-        $exercise = "$number1 - $number2 =";
+        $exercise = "$number1 - $number2 = ";
         $sollution = $number1 - $number2;
         break;
       case 'multiplication':
-        $exercise = "$number1 X $number2 =";
+        $exercise = "$number1 X $number2 = ";
         $sollution = $number1 * $number2;
         break;
       case 'division':
@@ -97,7 +118,7 @@ class MainController extends Controller
         if ($number2 == 0) {
           $number2 = 1;
         };
-        $exercise = "$number1 : $number2 =";
+        $exercise = "$number1 : $number2 = ";
         $sollution = $number1 / $number2;
         break;
     }
@@ -111,7 +132,7 @@ class MainController extends Controller
         'operation' => $opreation,
         'exercise_number' => $index,
         'exercise' => $exercise,
-        'sollution' => "$exercise $sollution "
+        'sollution' => " $sollution "
       ];
   }
 }
