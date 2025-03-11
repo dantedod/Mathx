@@ -11,7 +11,7 @@ class MainController extends Controller
   {
     return view("home");
   }
-  public function generateExercisies(Request $request)
+  public function generateExercisies(Request $request): View
   {
     //validacao do form
     $request->validate([
@@ -96,7 +96,7 @@ class MainController extends Controller
       ];
     }
 
-    dd($exercisies);
+    return view('operations', ['exercisies' => $exercisies]);
   }
   public function printExercisies()
   {
