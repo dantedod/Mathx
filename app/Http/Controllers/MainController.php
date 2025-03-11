@@ -51,50 +51,13 @@ class MainController extends Controller
     //generate exercisies
     $exercisies = [];
     for ($index = 1; $index <= $numberExcercisies; $index++) {
-
-      $opreation = $opreations[array_rand($opreations)];
-      $number1 = rand($min, $max);
-      $number2 = rand($min, $max);
-
-      $exercise = '';
-      $sollution = '';
-
-      switch ($opreation) {
-        case 'sum':
-          $exercise = "$number1 + $number2 =";
-          $sollution = $number1 + $number2;
-          break;
-        case 'subtraction':
-          $exercise = "$number1 - $number2 =";
-          $sollution = $number1 - $number2;
-          break;
-        case 'multiplication':
-          $exercise = "$number1 X $number2 =";
-          $sollution = $number1 * $number2;
-          break;
-        case 'division':
-          //evitar divisao com 0
-
-          if ($number2 == 0) {
-            $number2 = 1;
-          };
-          $exercise = "$number1 : $number2 =";
-          $sollution = $number1 / $number2;
-          break;
-      }
-
-      //if $sollution eh um numero com casas decimais, arredondar para 2 casas decimais
-      if (is_float($sollution)) {
-        $sollution = round($sollution, 2);
-      }
-
-      $exercisies[] = [
-        'operation' => $opreation,
-        'exercise_number' => $index,
-        'exercise' => $exercise,
-        'sollution' => "$exercise $sollution "
-      ];
+      $exercisies[] = $this->generateExercisie($index, $opreations, $min, $max,);
     }
+
+    //place exercises in session
+    // $request->session()->put('exercises', $exercisies);
+    //outra forma de botar na sessao
+    session(['exercises' => $exercisies]);
 
     return view('operations', ['exercisies' => $exercisies]);
   }
@@ -105,5 +68,50 @@ class MainController extends Controller
   public function exportExercisies()
   {
     echo "Exportar exercicios para um arquivo de texto";
+  }
+  private function generateExercisie($index, $opreations, $min, $max): array
+  {
+    $opreation = $opreations[array_rand($opreations)];
+    $number1 = rand($min, $max);
+    $number2 = rand($min, $max);
+
+    $exercise = '';
+    $sollution = '';
+
+    switch ($opreation) {
+      case 'sum':
+        $exercise = "$number1 + $number2 =";
+        $sollution = $number1 + $number2;
+        break;
+      case 'subtraction':
+        $exercise = "$number1 - $number2 =";
+        $sollution = $number1 - $number2;
+        break;
+      case 'multiplication':
+        $exercise = "$number1 X $number2 =";
+        $sollution = $number1 * $number2;
+        break;
+      case 'division':
+        //evitar divisao com 0
+
+        if ($number2 == 0) {
+          $number2 = 1;
+        };
+        $exercise = "$number1 : $number2 =";
+        $sollution = $number1 / $number2;
+        break;
+    }
+
+    //if $sollution eh um numero com casas decimais, arredondar para 2 casas decimais
+    if (is_float($sollution)) {
+      $sollution = round($sollution, 2);
+    }
+    return
+      [
+        'operation' => $opreation,
+        'exercise_number' => $index,
+        'exercise' => $exercise,
+        'sollution' => "$exercise $sollution "
+      ];
   }
 }
